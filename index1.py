@@ -151,4 +151,42 @@ correlations = {
 }
 
 correlations_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Person Correlation'])
-correlations_df.sort_values(by='Pearson Correlation', ascending=False)
+correlations_df = correlations_df.sort_values(
+    by='Person Correlation',
+    ascending=False
+)
+
+print(correlations_df)
+
+cat_features = ['is_male', 'is_smoker', 'region_southwest', 'bmi_category_Normal', 'bmi_category_Overweight', 'bmi_category_Obese']
+
+from scipy.stats import chi2_contingency
+import pandas as pd
+
+alpha = 0.05
+
+df_cleaned['charges_bin'] = pd.qcut(
+    df_cleaned['charges'],
+    q=4,
+    labels=False
+)
+
+chi2_results = {}
+
+for col in cat_features:
+    contingency_table = pd.crosstab(df_cleaned[col], df_cleaned['charges_bin'])
+    chi2_stat, p_val, _, _ = chi2_contingency(contingency_table)
+    decision = 'Reject Null (Keep Feature)' if p_val < alpha else 'Fail to Reject Null'
+    chi2_results[col] = {
+        'chi2_statistic' : chi2_stat,
+        'p_value' : p_val,
+        'Decision' : decision
+    }
+    
+chi2_df = pd.DataFrame(chi2_results).T
+chi2_df = chi2_df.sort_values(by='p_value', ascending=True)
+print(chi2_df)
+
+final_df = df_cleaned[['age', 'is_male', 'bmi', 'children', 'is_smoker','charges', 'region_southeast', 'bmi_category_Obese']]
+
+print(final_df)
