@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 
+from streamlit import columns
+from sympy import per
+
 warnings.filterwarnings("ignore")
 
 df = pd.read_csv("insurance.csv")
@@ -76,3 +79,76 @@ df_cleaned['sex'] = df_cleaned['sex'].map({'male': 0, 'female': 1})
 print(df_cleaned.head())
 
 print(df_cleaned['smoker'].value_counts())
+
+df_cleaned['smoker'] = df_cleaned['smoker'].map({'no': 0, 'yes': 1})
+print(df_cleaned)
+
+# Rename columns
+df_cleaned = df_cleaned.rename(
+    columns={
+        'sex': 'is_male',
+        'smoker': 'is_smoker'
+    }
+)
+
+# Check regions
+print(df_cleaned['region'].value_counts())
+
+# One-hot encoding region
+df_cleaned = pd.get_dummies(
+    df_cleaned,
+    columns=['region'],
+    drop_first=True
+)
+
+print(df_cleaned.head())
+print(df_cleaned.dtypes)
+
+# Feature Engineering and Extraction
+
+sns.histplot(df['bmi'])
+# plt.show()
+
+df_cleaned['bmi_category'] = pd.cut(
+    df_cleaned['bmi'],
+    bins = [0, 18.5, 24.9, 29.9, float('inf')],
+    labels = ['Underweight','Normal','Overweight','Obese']
+    
+)
+
+print(df_cleaned)
+
+
+df_cleaned = pd.get_dummies(df_cleaned, columns=['bmi_category'], drop_first=True)
+
+df_cleaned = df_cleaned.astype(int)
+
+print(df_cleaned.head())
+
+print(df_cleaned.columns)
+
+from sklearn.preprocessing import StandardScaler
+
+
+cols = ['age','bmi','children']
+
+scalar = StandardScaler()
+
+df_cleaned[cols] = scalar.fit_transform(df_cleaned[cols])
+
+print(df_cleaned.head())
+
+from scipy.stats import pearsonr
+
+selected_feature = [
+    'age', 'is_male', 'bmi', 'children', 'is_smoker', 'region_northwest', 
+    'region_southeast', 'region_southwest', 'bmi_category_Normal', 'bmi_category_Overweight', 'bmi_category_Obese'
+]
+
+correlations = {
+    feature: pearsonr(df_cleaned[feature], df_cleaned['charges'])[0]
+    for feature in selected_feature
+}
+
+correlations_df = pd.DataFrame(list(correlations.items()), columns=['Feature', 'Person Correlation'])
+correlations_df.sort_values(by='Pearson Correlation', ascending=False)
