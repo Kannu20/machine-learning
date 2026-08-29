@@ -82,7 +82,16 @@ sns.heatmap(df.corr(numeric_only=True),annot=True)
 plt.title('Correlation Heatmap')
 plt.show()
 
+# Data Preprocessing and Cleaning
+
 df_encode = pd.get_dummies(df, drop_first=True)
 print(df_encode.head())
 
 print(df_encode.astype(int))
+
+from sklearn.preprocessing import StandardScaler
+numerical_cols = ['Age', 'RestingBP', 'Cholesterol', 'MaxHR', 'Oldpeak']
+scaler = StandardScaler()
+df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+df_encode[numerical_cols] = scaler.fit_transform(df_encode[numerical_cols])
+print(df_encode.head())
