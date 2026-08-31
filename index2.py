@@ -89,6 +89,7 @@ print(df_encode.head())
 
 print(df_encode.astype(int))
 
+
 from sklearn.preprocessing import StandardScaler
 numerical_cols = ['Age', 'RestingBP', 'Cholesterol', 'MaxHR', 'Oldpeak']
 scaler = StandardScaler()
