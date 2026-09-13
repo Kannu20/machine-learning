@@ -22,3 +22,9 @@ print(f"F-Statistic: {f_stats}")
 print(f"P-Value: {p_value}")
 
 
+alpha = 0.05
+
+if p_value < alpha:
+    print("Reject the null hypothesis and there is a significant difference between in atleast one passenger class")
+else:
+    print("There is no significant difference")
