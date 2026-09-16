@@ -55,3 +55,9 @@ for name, model in models.items():
     })
 
 print("Results:",results)
+
+import joblib
+joblib.dump(models['Naive Bayes'], 'Naive_Bayes_heart')
+joblib.dump(scaler, 'scalar.pkl')
+joblib.dump(X.columns.tolist(), 'columns.pkl')
+
