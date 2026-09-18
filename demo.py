@@ -1,3 +1,5 @@
-l = 10
+# l = 10
 
-print(id(l))
+# print(id(l))
+
+print(True * False + 10)                 
