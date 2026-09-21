@@ -90,3 +90,26 @@ r = range(1, 10)
 
 print(list(r[2:11:2]))
 
+# Type Casting
+
+# print(complex(10, 20))
+
+print(bool(3 + 2j)) # if the value is greater than and less than 0 then boolean always print True
+print(bool(" "))
+print(bool("")) # this is empty string so it will give false
+
+print(str(10))
+print(str(10.5))
+print(str(10 +3j))
+print(str(True))
+print(str(False))
+
+print('10')
+
+# String Formatting
+
+
+name = "Kanishak"
+age = 22
+
+print(f"My name is {name} and my age is {age}")
