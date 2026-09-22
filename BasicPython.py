@@ -113,3 +113,6 @@ name = "Kanishak"
 age = 22
 
 print(f"My name is {name} and my age is {age}")
+
+
+print(int(10.90))
