@@ -5,7 +5,7 @@ from sklearn.datasets import make_blobs
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 
-x, y_true = make_blobs(n_samples=500, centers=3, cluster_std=0.60, random_state=42)
+x, y_true = make_blobs(n_samples=500, centers=3, cluster_std=0.5, random_state=42)
 
 df = pd.DataFrame(x, columns=['Feature_1', 'Feature_2'])
 print(df)
@@ -35,4 +35,28 @@ sns.scatterplot(x=df['Feature_1'],
                 y=df['Feature_2'],
                 hue=df['cluster'],
                 palette='viridis')
+plt.show()
+
+from sklearn.datasets import make_moons
+
+x, y_true = make_moons(n_samples=500, noise=0.05, random_state=42)
+
+from sklearn.cluster import KMeans, DBSCAN
+
+df = pd.DataFrame(x, columns=['Feature_1', 'Feature_2'])
+
+scaler = StandardScaler()
+x_scaled = scaler.fit_transform(df)
+
+kmeans = KMeans(n_clusters=2, random_state=42)
+kmeans_labels = kmeans.fit_predict(x_scaled)
+
+df['kmeans_cluster'] = kmeans_labels
+
+sns.scatterplot(x=df['Feature_1'],
+                y=df['Feature_2'],
+                hue=df['kmeans_cluster'],
+                palette='tab10')
+
+plt.title('K-Means Clustering on Moons Dataset')
 plt.show()
